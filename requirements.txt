@@ -1,6 +1,7 @@
+torch==2.11.0
+torchvision==0.26.0
 numpy
-pillow
-matplotlib
 scikit-learn
-torch
-torchvision
+matplotlib
+seaborn
+pillow
