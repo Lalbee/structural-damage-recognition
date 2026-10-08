@@ -12,6 +12,7 @@ DATASET/
 # Prepared datasets
 data/
 data_small/
+*.npy
 
 # ZIP archives
 *.zip
