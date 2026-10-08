@@ -14,6 +14,7 @@ CLASS_NAMES = {
 
 
 def load_model(model_path, device):
+
     model = models.efficientnet_b0(weights=None)
 
     model.classifier[1] = nn.Linear(
@@ -38,6 +39,7 @@ def load_model(model_path, device):
 
 
 def predict(model, image_path, device):
+
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
@@ -48,17 +50,28 @@ def predict(model, image_path, device):
     ])
 
     image = Image.open(image_path).convert("RGB")
+
     image_tensor = transform(image).unsqueeze(0).to(device)
 
     with torch.no_grad():
-        output = model(image_tensor)
-        probabilities = torch.softmax(output, dim=1)[0]
 
-    predicted_class = torch.argmax(probabilities).item()
+        output = model(image_tensor)
+
+        probabilities = torch.softmax(
+            output,
+            dim=1
+        )[0]
+
+    predicted_class = torch.argmax(
+        probabilities
+    ).item()
 
     damaged_probability = probabilities[0].item()
     undamaged_probability = probabilities[1].item()
-    confidence = probabilities[predicted_class].item()
+
+    confidence = probabilities[
+        predicted_class
+    ].item()
 
     prediction = CLASS_NAMES[predicted_class]
 
@@ -74,6 +87,7 @@ def predict(model, image_path, device):
 
 
 def main():
+
     parser = argparse.ArgumentParser(
         description="Predict structural damage from an image."
     )
@@ -111,7 +125,10 @@ def main():
             f"Image file not found: {image_path}"
         )
 
-    model = load_model(model_path, device)
+    model = load_model(
+        model_path,
+        device
+    )
 
     predict(
         model,
